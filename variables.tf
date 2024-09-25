@@ -37,7 +37,7 @@ variable "runbook" {
   description = "The Automation Runbook properties"
 
   validation {
-    condition = contains(["Graph", "GraphPowerShell", "GraphPowerShellWorkflow", "PowerShellWorkflow", "PowerShell", "PowerShell72", "Python3", "Python2", "Script"], var.runbook.runbook_type)
+    condition     = contains(["Graph", "GraphPowerShell", "GraphPowerShellWorkflow", "PowerShellWorkflow", "PowerShell", "PowerShell72", "Python3", "Python2", "Script"], var.runbook.runbook_type)
     error_message = "runbook_type must be one of: Graph, GraphPowerShell, GraphPowerShellWorkflow, PowerShellWorkflow, PowerShell, PowerShell72, Python3, Python2, Script."
   }
 }
@@ -46,7 +46,7 @@ variable "schedules" {
   type = set(object({
     name        = string
     description = optional(string)
-    frequency   = string
+    frequency   = optional(string)
     interval    = optional(string, "1")
     start_time  = optional(string, null)
     week_days   = optional(list(string), ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])
@@ -71,8 +71,8 @@ variable "automation_variables" {
     name        = string
     description = optional(string, "Managed by Terraform")
     encrypted   = optional(bool, false)
-    type        = optional(string, "string")  # Should be one of: "int", "string", "object"
-    value       = optional(any)     # This can be an int, string, or map, depending on `type`
+    type        = optional(string, "string") # Should be one of: "int", "string", "object"
+    value       = optional(any)              # This can be an int, string, or map, depending on `type`
   }))
   description = "Automation variables needed for this runbook"
 
