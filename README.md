@@ -2,7 +2,7 @@
 This module enables creation of runbooks in an existing Azure automation account.
 
 ## Key features
-- Creation and assign of 1 or more schedules (schedules are designed to be for each specific automation rather than shared across many)
+- Creation and assignment of 1 or more schedules (schedules are designed to be for each specific automation rather than shared across many)
 - 1 or more automation variables
 - The `run_on` field for specifying a hybrid worker pool
 -
@@ -14,7 +14,7 @@ To be completed soon.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1..0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 3.40.0 |
 
 ## Providers
