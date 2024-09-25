@@ -17,35 +17,48 @@ module "Runbook3" {
 
   schedules = [
     {
-      name        = "Runbook3-Daily1"
-      frequency   = "Day"
-      interval    = 1
-      description = "Runbook3-Daily1"
+      name        = "Runbook3-OneTime"
+      frequency   = "OneTime"
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-OneTime"
       enabled     = false
       run_on      = ""
     },
     {
-      name        = "Runbook3-Daily2"
+      name        = "Runbook3-Daily"
       frequency   = "Day"
       interval    = 1
-      description = "Runbook3-Daily2"
-      enabled     = false
-      run_on      = ""
-    },
-    {
-      name        = "Runbook3-Weekly1"
-      frequency   = "Week"
-      interval    = 1
-      description = "Runbook3-Weekly1"
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Daily"
       enabled     = true
       run_on      = ""
     },
     {
-      name        = "Runbook3-Weekly2"
+      name        = "Runbook3-Hourly"
+      frequency   = "Hour"
+      interval    = 1
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Hourly"
+      enabled     = false
+      run_on      = ""
+    },
+    {
+      name        = "Runbook3-Weekly"
       frequency   = "Week"
       interval    = 1
-      description = "Runbook3-Weekly2"
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Weekly"
       week_days   = ["Monday", "Friday"]
+      enabled     = true
+      run_on      = ""
+    },
+    {
+      name        = "Runbook3-Monthly"
+      frequency   = "Month"
+      interval    = 1
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Monthly"
+      enabled     = false
       run_on      = ""
     }
   ]
@@ -54,6 +67,12 @@ module "Runbook3" {
     {
       name      = "Runbook3-Environment"
       value     = "Dev"
+      type      = "string"
+      encrypted = false
+    },
+    {
+      name      = "Runbook3-TestVar"
+      value     = "runbook3testvar"
       type      = "string"
       encrypted = false
     }

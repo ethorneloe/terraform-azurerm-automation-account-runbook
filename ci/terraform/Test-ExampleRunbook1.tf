@@ -17,39 +17,48 @@ module "Runbook1" {
 
   schedules = [
     {
-      name        = "Runbook1-Daily1"
-      frequency   = "Day"
-      interval    = 1
+      name        = "Runbook1-OneTime"
+      frequency   = "OneTime"
       start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook1-Daily1"
-      enabled     = false
-      run_on      = ""
-    },
-    {
-      name        = "Runbook1-Daily2"
-      frequency   = "Day"
-      interval    = 1
-      start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook1-Daily2"
+      description = "Runbook1-OneTime"
       enabled     = true
       run_on      = ""
     },
     {
-      name        = "Runbook1-Weekly1"
-      frequency   = "Week"
+      name        = "Runbook1-Daily"
+      frequency   = "Day"
       interval    = 1
       start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook1-Weekly1"
+      description = "Runbook1-Daily"
       enabled     = true
       run_on      = ""
     },
     {
-      name        = "Runbook1-Weekly2"
+      name        = "Runbook1-Hourly"
+      frequency   = "Hour"
+      interval    = 1
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Hourly"
+      enabled     = true
+      run_on      = ""
+    },
+    {
+      name        = "Runbook1-Weekly"
       frequency   = "Week"
       interval    = 1
       start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook1-Weekly2"
+      description = "Runbook1-Weekly"
       week_days   = ["Monday", "Friday"]
+      enabled     = true
+      run_on      = ""
+    },
+    {
+      name        = "Runbook1-Monthly"
+      frequency   = "Month"
+      interval    = 1
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Monthly"
+      enabled     = true
       run_on      = ""
     }
   ]
@@ -57,7 +66,7 @@ module "Runbook1" {
   automation_variables = [
     {
       name      = "Runbook1-Environment"
-      value     = "Production"
+      value     = "Dev"
       type      = "string"
       encrypted = false
     }

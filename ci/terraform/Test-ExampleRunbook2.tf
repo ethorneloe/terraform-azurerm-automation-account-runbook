@@ -25,39 +25,48 @@ module "Runbook2" {
 
   schedules = [
     {
+      name        = "Runbook2-OneTime"
+      frequency   = "OneTime"
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-OneTime"
+      enabled     = true
+      run_on      = ""
+    },
+    {
       name        = "Runbook2-Daily"
       frequency   = "Day"
       interval    = 1
       start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook2-Daily1"
-      enabled     = true
-      run_on      = ""
-    },
-    {
-      name        = "Runbook2-Daily2"
-      frequency   = "Day"
-      interval    = 1
-      start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook2-Daily2"
-      enabled     = true
-      run_on      = ""
-    },
-    {
-      name        = "Runbook2-Weekly1"
-      frequency   = "Week"
-      interval    = 1
-      start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook2-Weekly1"
+      description = "Runbook1-Daily"
       enabled     = false
       run_on      = ""
     },
     {
-      name        = "Runbook2-Weekly2"
+      name        = "Runbook2-Hourly"
+      frequency   = "Hour"
+      interval    = 1
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Hourly"
+      enabled     = true
+      run_on      = ""
+    },
+    {
+      name        = "Runbook2-Weekly"
       frequency   = "Week"
       interval    = 1
       start_time  = "2050-09-19T01:00:00+10:00"
-      description = "Runbook2-Weekly2"
+      description = "Runbook1-Weekly"
       week_days   = ["Monday", "Friday"]
+      enabled     = false
+      run_on      = ""
+    },
+    {
+      name        = "Runbook2-Monthly"
+      frequency   = "Month"
+      interval    = 1
+      start_time  = "2050-09-19T01:00:00+10:00"
+      description = "Runbook1-Monthly"
+      enabled     = true
       run_on      = ""
     }
   ]
@@ -70,8 +79,8 @@ module "Runbook2" {
       encrypted = true
     },
     {
-      name      = "Runbook2-TestVal1"
-      value     = "testval1"
+      name      = "Runbook2-TestVar"
+      value     = "runbook2testvar"
       type      = "string"
       encrypted = false
     }
