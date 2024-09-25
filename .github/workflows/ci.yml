@@ -102,6 +102,6 @@ jobs:
       # Terraform Destroy (Cleanup)
       - name: Terraform Destroy
         if: always()
-        working-directory: ./tests
+        working-directory: ./tests/terraform
         run: terraform destroy -auto-approve
 
