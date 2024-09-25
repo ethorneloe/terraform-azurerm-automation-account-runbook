@@ -9,10 +9,10 @@ module "Runbook3" {
   runbook = {
     name         = "Test-ExampleRunbook3"
     description  = "First example runbook"
-    content      = file("../azure-runbooks/Test-ExampleRunbook3.ps1")
+    content      = file("../azure-runbooks/Test-ExampleRunbook3.py")
     log_verbose  = true
     log_progress = true
-    runbook_type = "PowerShell72"
+    runbook_type = "Python3"
   }
 
   schedules = [
