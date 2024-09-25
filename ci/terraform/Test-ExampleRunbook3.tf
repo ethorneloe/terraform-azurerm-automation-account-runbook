@@ -20,7 +20,6 @@ module "Runbook3" {
       name        = "Runbook3-Daily1"
       frequency   = "Day"
       interval    = 1
-      start_time  = "2024-09-19T01:00:00+10:00"
       description = "Runbook3-Daily1"
       enabled     = false
       run_on      = ""
@@ -29,7 +28,6 @@ module "Runbook3" {
       name        = "Runbook3-Daily2"
       frequency   = "Day"
       interval    = 1
-      start_time  = "2024-09-19T01:00:00+10:00"
       description = "Runbook3-Daily2"
       enabled     = false
       run_on      = ""
@@ -38,7 +36,6 @@ module "Runbook3" {
       name        = "Runbook3-Weekly1"
       frequency   = "Week"
       interval    = 1
-      start_time  = "2024-09-19T01:00:00+10:00"
       description = "Runbook3-Weekly1"
       enabled     = true
       run_on      = ""
@@ -47,18 +44,8 @@ module "Runbook3" {
       name        = "Runbook3-Weekly2"
       frequency   = "Week"
       interval    = 1
-      start_time  = "2024-09-19T01:00:00+10:00"
       description = "Runbook3-Weekly2"
       week_days   = ["Monday", "Friday"]
-      run_on      = ""
-    },
-    {
-      name        = "Runbook3-Weekly3"
-      frequency   = "Week"
-      interval    = 1
-      start_time  = "2024-09-19T01:00:00+10:00"
-      description = "Runbook3-Weekly3"
-      week_days   = ["Tuesday", "Friday"]
       run_on      = ""
     }
   ]
