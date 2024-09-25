@@ -13,6 +13,10 @@ permissions:
   contents: read
   security-events: write
 
+concurrency:
+  group: ci
+  cancel-in-progress: false
+
 jobs:
   terraform-module-ci:
     name: terraform-module-ci
