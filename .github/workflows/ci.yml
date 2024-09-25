@@ -1,0 +1,99 @@
+name: terraform-module-ci
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  terraform-module-ci:
+    name: terraform-module-ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Environment Variables
+        run: |
+          # Setup Environment Variables
+          echo "ARM_CLIENT_ID=${{ secrets.CLIENT_ID }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_automation_account_name=${{ vars.TF_VAR_automation_account_name}}" >> $GITHUB_ENV
+          echo "TF_VAR_resource_group_name=${{ vars.TF_VAR_resource_group_name }}" >> $GITHUB_ENV
+          echo "TF_VAR_secret=${{ vars.TF_VAR_resource_group_name }}" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Authenticate to azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ vars.TERRAFORM_VERSION }}
+
+      - name: Terraform Init
+        working-directory: ./tests/terraform
+        run: |
+          # terraform init
+          set -x
+          terraform init -input=false
+        shell: bash
+
+      - name: Terraform Validate
+        working-directory: ./tests/terraform
+        run: |
+          # terraform validate
+          terraform validate
+        shell: bash
+
+      - name: Run Trivy vulnerability scanner in IaC mode
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: "config"
+          hide-progress: true
+          format: "sarif"
+          output: "trivy-results.sarif"
+          exit-code: "1"
+          ignore-unfixed: true
+          severity: "CRITICAL,HIGH"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+
+      - name: Terraform Plan
+        working-directory: ./tests/terraform
+        run: |
+            terraform plan -input=false -out=tfplan
+        shell: bash
+
+      - name: Verify Terraform Plan
+        working-directory: ./tests/terraform
+        run: |
+          # Pester Tests on plan
+        shell: pwsh
+
+      - name: Terraform Apply
+        working-directory: ./tests/terraform
+        run: terraform apply -auto-approve tfplan
+
+      - name: Verify Terraform Outputs and Apply Actions
+        working-directory: ./tests/terraform
+        run: |
+          # Tests here
+        shell: pwsh
+
+      # Terraform Destroy (Cleanup)
+      - name: Terraform Destroy
+        if: always()
+        working-directory: ./tests
+        run: terraform destroy -auto-approve
+
