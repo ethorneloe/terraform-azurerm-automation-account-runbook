@@ -25,7 +25,7 @@ resource "azurerm_automation_schedule" "this" {
   resource_group_name     = var.resource_group_name
   automation_account_name = var.automation_account_name
   frequency               = each.value.frequency
-  interval                = each.value.frequency == "OneTime" ? [] : each.value.interval
+  interval                = each.value.frequency == "OneTime" ? null : each.value.interval
   start_time              = each.value.start_time
   description             = each.value.description
   timezone                = var.timezone
