@@ -20,7 +20,7 @@ jobs:
     environment: 'ci'
     defaults:
       run:
-        working-directory: ci/tests/terraform
+        working-directory: ./ci/terraform
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -51,8 +51,6 @@ jobs:
 
       - name: Terraform Init
         run: |
-          pwd
-          ls -a
           # terraform init
           set -x
           terraform init -input=false
