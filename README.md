@@ -1,8 +1,13 @@
-# Azure Automation Runbook Terraform module
-Terraform module for creating runbooks in an existing Azure automation account.
+# terraform-azurerm-automation-account-runbook
+This module enables creation of runbooks in an existing Azure automation account.
 
-Support schedules, automation variables, and `run_on` for specifying a hybrid worker pool.
+## Key features
+- Creation and assign of 1 or more schedules (schedules are designed to be for each specific automation rather than shared across many)
+- 1 or more automation variables
+- The `run_on` field for specifying a hybrid worker pool
+-
 ## Usage
+To be completed soon.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
