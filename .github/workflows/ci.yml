@@ -96,12 +96,16 @@ jobs:
         run: terraform apply -auto-approve tfplan
 
       - name: Verify Terraform Outputs and Apply Actions
+        working-directory: ./ci/pester-tests
         run: |
-          # Tests here
+          Invoke-Pester -Script 'post-apply.Tests.ps1' -Output Detailed
         shell: pwsh
 
       # Terraform Destroy (Cleanup)
       - name: Terraform Destroy
         if: always()
         run: terraform destroy -auto-approve
+
+
+
 
