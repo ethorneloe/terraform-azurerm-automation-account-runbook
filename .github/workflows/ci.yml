@@ -106,7 +106,7 @@ jobs:
             }
 
             # Create a Pester container
-            $container = New-PesterContainer -Path "{{ github.workspace }}/ci/pester-tests/post-apply" -Data $params
+            $container = New-PesterContainer -Path "$($env:GITHUB_WORKSPACE)/ci/pester-tests/post-apply" -Data $params
 
             # Invoke Pester with the container
             Invoke-Pester -Container $container -Output Detailed
