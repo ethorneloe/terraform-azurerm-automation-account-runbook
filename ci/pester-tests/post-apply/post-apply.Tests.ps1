@@ -83,7 +83,7 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
         $runbookName = $_.Name
 
         # Execute Runbook and Grab Output
-        $job = Start-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbookName -RunOn "Azure"
+        $job = Start-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbookName
         $job | Should -Not -BeNullOrEmpty
 
         # Wait for the job to complete with a maximum of 12 iterations (1 minute)
