@@ -36,6 +36,11 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
             Variables = @(
                 @{ Name = "Runbook1-Environment"; Encrypted = $false }
             )
+            Tags      = @{
+                "Environment" = "Dev"
+                "ManagedBy"   = "Terraform"
+                "Project"     = "Automation"
+            }
         },
         @{
             Name      = "Test-ExampleRunbook2"
@@ -50,6 +55,11 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
                 @{ Name = "Runbook2-Secret"; Encrypted = $true },
                 @{ Name = "Runbook2-TestVar"; Encrypted = $false }
             )
+            Tags      = @{
+                "Environment" = "Dev"
+                "ManagedBy"   = "Terraform"
+                "Project"     = "Automation"
+            }
         },
         @{
             Name      = "Test-ExampleRunbook3"
@@ -64,6 +74,11 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
                 @{ Name = "Runbook3-Environment"; Encrypted = $false },
                 @{ Name = "Runbook3-TestVar"; Encrypted = $false }
             )
+            Tags      = @{
+                "Environment" = "Dev"
+                "ManagedBy"   = "Terraform"
+                "Project"     = "Automation"
+            }
         }
     )
 
@@ -93,6 +108,11 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
             $variableResource | Should -Not -BeNullOrEmpty
             $variableResource.Name | Should -Be $variable.Name
             $variableResource.Encrypted | Should -Be $variable.Encrypted
+        }
+
+        # Check Runbook Tags
+        foreach ($key in $_.Tags.Keys) {
+            $runbookResource.Tags[$key] | Should -Be $_.Tags[$key]
         }
     }
 
