@@ -95,7 +95,7 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
         $jobStatus = $null
         for ($i = 0; $i -lt 12; $i++) {
             Write-Host "...Waiting for job to complete..."
-            Start-Sleep -Seconds 5
+            Start-Sleep -Seconds 10
             $job = Get-AzAutomationJob -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Id $job.JobId
             $jobStatus = $job.Status
             if ($jobStatus -eq "Completed" -or $jobStatus -eq "Failed" -or $jobStatus -eq "Suspended") {

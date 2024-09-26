@@ -85,6 +85,8 @@ jobs:
       - name: Terraform Plan
         run: |
             terraform plan -input=false -out=tfplan
+            terraform show -json tfplan > tfplan.json
+            cat tfplan.json
         shell: bash
 
       - name: Verify Terraform Plan
