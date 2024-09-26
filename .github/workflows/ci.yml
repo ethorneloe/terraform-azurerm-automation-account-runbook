@@ -86,8 +86,13 @@ jobs:
         run: |
             terraform plan -input=false -out=tfplan
             terraform show -json tfplan > tfplan.json
-            cat tfplan.json
         shell: bash
+
+      - name: Upload tfplan.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan-json
+          path: tfplan.json
 
       - name: Verify Terraform Plan
         run: |
