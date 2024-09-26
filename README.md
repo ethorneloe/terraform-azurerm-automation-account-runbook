@@ -14,7 +14,7 @@ See the `ci/terraform` folder in this repo for an example of runbook creation wi
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1..0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 3.40.0 |
 
 ## Providers
@@ -45,11 +45,11 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_automation_account_name"></a> [automation\_account\_name](#input\_automation\_account\_name) | Automation Account name | `string` | n/a | yes |
-| <a name="input_automation_variables"></a> [automation\_variables](#input\_automation\_variables) | Automation variables needed for this runbook | <pre>list(object({<br>    name        = string<br>    description = optional(string, "Managed by Terraform")<br>    encrypted   = optional(bool, false)<br>    type        = optional(string, "string")  # Should be one of: "int", "string", "object"<br>    value       = optional(any)     # This can be an int, string, or map, depending on `type`<br>  }))</pre> | `[]` | no |
+| <a name="input_automation_variables"></a> [automation\_variables](#input\_automation\_variables) | Automation variables needed for this runbook | <pre>list(object({<br/>    name        = string<br/>    description = optional(string, "Managed by Terraform")<br/>    encrypted   = optional(bool, false)<br/>    type        = optional(string, "string") # Should be one of: "int", "string", "object"<br/>    value       = optional(any)              # This can be an int, string, or map, depending on `type`<br/>  }))</pre> | `[]` | no |
 | <a name="input_location"></a> [location](#input\_location) | Azure location | `string` | n/a | yes |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Resource group name containing the existing Automation Account | `string` | n/a | yes |
-| <a name="input_runbook"></a> [runbook](#input\_runbook) | The Automation Runbook properties | <pre>object({<br>    name         = string<br>    description  = optional(string)<br>    script_path  = optional(string)<br>    content      = optional(string)<br>    log_verbose  = optional(bool, true)<br>    log_progress = optional(bool, true)<br>    runbook_type = optional(string, "PowerShell72")<br>  })</pre> | n/a | yes |
-| <a name="input_schedules"></a> [schedules](#input\_schedules) | Schedules needed for this runbook | <pre>set(object({<br>    name        = string<br>    description = optional(string)<br>    frequency   = string<br>    interval    = optional(string, "1")<br>    start_time  = optional(string, null)<br>    week_days   = optional(list(string), ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])<br>    parameters  = optional(any, {})<br>    enabled     = optional(bool, true)<br>    run_on      = optional(string)<br>  }))</pre> | `[]` | no |
+| <a name="input_runbook"></a> [runbook](#input\_runbook) | The Automation Runbook properties | <pre>object({<br/>    name         = string<br/>    description  = optional(string)<br/>    script_path  = optional(string)<br/>    content      = optional(string)<br/>    log_verbose  = optional(bool, true)<br/>    log_progress = optional(bool, true)<br/>    runbook_type = optional(string, "PowerShell72")<br/>  })</pre> | n/a | yes |
+| <a name="input_schedules"></a> [schedules](#input\_schedules) | Schedules needed for this runbook | <pre>set(object({<br/>    name        = string<br/>    description = optional(string)<br/>    frequency   = optional(string)<br/>    interval    = optional(string, "1")<br/>    start_time  = optional(string, null)<br/>    week_days   = optional(list(string), ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"])<br/>    parameters  = optional(any, {})<br/>    enabled     = optional(bool, true)<br/>    run_on      = optional(string)<br/>  }))</pre> | `[]` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Resource tags | `map(any)` | `{}` | no |
 | <a name="input_timezone"></a> [timezone](#input\_timezone) | Timezone for schedules | `string` | n/a | yes |
 
