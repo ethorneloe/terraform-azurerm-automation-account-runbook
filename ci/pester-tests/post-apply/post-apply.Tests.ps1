@@ -56,6 +56,9 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
 
         # Check Automation Runbook
         $runbookName = $_.Name
+
+        Write-Host "Checking Runbook: $runbookName"
+
         $runbookResource = Get-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbookName
         $runbookResource | Should -Not -BeNullOrEmpty
         $runbookResource.Name | Should -Be $runbookName
@@ -82,6 +85,8 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
 
         $runbookName = $_.Name
 
+        Write-Host "Executing Runbook: $runbookName"
+
         # Execute Runbook and Grab Output
         $job = Start-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbookName
         $job | Should -Not -BeNullOrEmpty
@@ -89,6 +94,7 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
         # Wait for the job to complete with a maximum of 12 iterations (1 minute)
         $jobStatus = $null
         for ($i = 0; $i -lt 12; $i++) {
+            Write-Host "...Waiting for job to complete..."
             Start-Sleep -Seconds 5
             $job = Get-AzAutomationJob -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Id $job.JobId
             $jobStatus = $job.Status
@@ -101,7 +107,7 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
         $jobStatus | Should -Be "Completed"
 
         # Get job output
-        $jobOutput = Get-AzAutomationJobOutput -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Id $job.JobId -Stream Output
+        $jobOutput = Get-AzAutomationJobOutput -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Id $job.JobId -Stream Output | Select-Object -ExpandProperty Summary
         $jobOutput | Should -eq $runbookName
 
     }
