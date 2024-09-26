@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: 'ci'
     env:
-      TF_PLAN_OUTPUT_JSON_FILEPATH: './ci/terraform/tfplan.json'
+      TF_PLAN_OUTPUT_JSON_FILEPATH: ${{ github.workspace }}/ci/terraform/tfplan.json
     defaults:
       run:
         working-directory: ./ci/terraform
@@ -87,14 +87,8 @@ jobs:
       - name: Terraform Plan
         run: |
             terraform plan -input=false -out=tfplan
-            terraform show -json tfplan > tfplan.json
+            terraform show -json tfplan > TF_PLAN_OUTPUT_JSON_FILEPATH
         shell: bash
-
-      - name: Upload tfplan.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: tfplan-json
-          path: ${{ env.TF_PLAN_OUTPUT_JSON_FILEPATH }}
 
       - name: Verify Terraform Plan
         run: |
