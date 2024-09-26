@@ -3,9 +3,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'ci/**'
+      - '*.tf'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches:
       - main
+    paths:
+      - 'ci/**'
+      - '*.tf'
+      - '.github/workflows/ci.yml'
   workflow_dispatch:
 
 permissions:
