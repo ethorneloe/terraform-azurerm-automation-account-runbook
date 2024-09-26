@@ -7,27 +7,33 @@ param (
 )
 
 Describe "Test Azure Automation Runbook and Related Resource Creation" {
+
     # Define the expected resources for each runbook
-    $runbooks = @(
-        @{
-            Name = "Test-ExampleRunbook1"
-            Schedules = @("Runbook1-OneTime", "Runbook1-Daily", "Runbook1-Hourly", "Runbook1-Weekly", "Runbook1-Monthly")
-            Variables = @("Runbook1-Environment")
-        },
-        @{
-            Name = "Test-ExampleRunbook2"
-            Schedules = @("Runbook2-OneTime", "Runbook2-Daily", "Runbook2-Hourly", "Runbook2-Weekly", "Runbook2-Monthly")
-            Variables = @("Runbook2-Secret", "Runbook2-TestVar")
-        },
-        @{
-            Name = "Test-ExampleRunbook3"
-            Schedules = @("Runbook3-OneTime", "Runbook3-Daily", "Runbook3-Hourly", "Runbook3-Weekly", "Runbook3-Monthly")
-            Variables = @("Runbook3-Environment", "Runbook3-TestVar")
-        }
-    )
+    BeforeAll {
+
+        $global:runbooks = @(
+            @{
+                Name      = "Test-ExampleRunbook1"
+                Schedules = @("Runbook1-OneTime", "Runbook1-Daily", "Runbook1-Hourly", "Runbook1-Weekly", "Runbook1-Monthly")
+                Variables = @("Runbook1-Environment")
+            },
+            @{
+                Name      = "Test-ExampleRunbook2"
+                Schedules = @("Runbook2-OneTime", "Runbook2-Daily", "Runbook2-Hourly", "Runbook2-Weekly", "Runbook2-Monthly")
+                Variables = @("Runbook2-Secret", "Runbook2-TestVar")
+            },
+            @{
+                Name      = "Test-ExampleRunbook3"
+                Schedules = @("Runbook3-OneTime", "Runbook3-Daily", "Runbook3-Hourly", "Runbook3-Weekly", "Runbook3-Monthly")
+                Variables = @("Runbook3-Environment", "Runbook3-TestVar")
+            }
+        )
+
+        $global:runbookName = $runbook['name']
+    }
 
     foreach ($runbook in $runbooks) {
-        $runbookName = $runbook['name']
+
         Context "Runbook $runbookName" {
             It "Should contain the expected automation account resources" {
                 # Check Automation Runbook
@@ -53,17 +59,17 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
             It "Should execute the runbook and collect the output" {
                 # Start the Runbook
                 $job = Start-AzAutomationRunbook -AutomationAccountName $AutomationAccountName `
-                                                 -ResourceGroupName $ResourceGroupName `
-                                                 -Name $runbookName `
-                                                 -Parameters @{} -Wait
+                    -ResourceGroupName $ResourceGroupName `
+                    -Name $runbookName `
+                    -Parameters @{} -Wait
 
                 # Wait for the job to complete
                 $job | Wait-AzAutomationJob -Timeout 600
 
                 # Get the job output
                 $output = Get-AzAutomationJobOutput -ResourceGroupName $ResourceGroupName `
-                                                    -AutomationAccountName $AutomationAccountName `
-                                                    -Id $job.JobId -Stream Output
+                    -AutomationAccountName $AutomationAccountName `
+                    -Id $job.JobId -Stream Output
 
                 # Check the output
                 $output | Should -Not -BeNullOrEmpty
