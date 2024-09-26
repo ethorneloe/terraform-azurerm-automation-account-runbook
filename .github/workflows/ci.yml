@@ -22,8 +22,6 @@ jobs:
     name: terraform-module-ci
     runs-on: ubuntu-latest
     environment: 'ci'
-    env:
-      TF_PLAN_OUTPUT_JSON_FILEPATH: ${{ github.workspace }}/ci/terraform/tfplan.json
     defaults:
       run:
         working-directory: ./ci/terraform
@@ -40,6 +38,7 @@ jobs:
           echo "TF_VAR_automation_account_name=${{ vars.TF_VAR_automation_account_name}}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ vars.TF_VAR_resource_group_name }}" >> $GITHUB_ENV
           echo "TF_VAR_test_secret=${{ secrets.TF_VAR_test_secret}}" >> $GITHUB_ENV
+          echo "TF_PLAN_OUTPUT_JSON_FILEPATH: ${{ github.workspace }}/ci/terraform/tfplan.json"
         shell: bash
 
       - name: Authenticate to azure
@@ -87,13 +86,8 @@ jobs:
       - name: Terraform Plan
         run: |
             terraform plan -input=false -out=tfplan
-            terraform show -json tfplan > TF_PLAN_OUTPUT_JSON_FILEPATH
+            terraform show -json tfplan > $TF_PLAN_OUTPUT_JSON_FILEPATH
         shell: bash
-
-      - name: Verify Terraform Plan
-        run: |
-          # Pester Tests on plan
-        shell: pwsh
 
       - name: Verify Terraform Plan
         uses: azure/powershell@v2

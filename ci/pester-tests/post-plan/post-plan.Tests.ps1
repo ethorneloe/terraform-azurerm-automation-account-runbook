@@ -10,7 +10,8 @@ It performs the following checks:
 4. Iterates over each runbook to verify that the Terraform plan contains the expected resources.
 5. Checks that enabled schedules and their associated job schedules exist in the plan, while disabled schedules and their job schedules do not.
 6. Verifies that all defined variables for each runbook are present in the plan.
-7. Ensures the total counts of each resource type in the plan match the expected counts.
+7. Confirms that the correct tags will be configured.
+8. Ensures the total counts of each resource type in the plan match the expected counts.
 
 #>
 
@@ -32,6 +33,8 @@ Describe "Automation Account Resource Changes in Terraform Plan" {
         $script:planRunbooks = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_runbook' } | Select-Object type, change
         $script:planVariables = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_variable_string' } | Select-Object type, change
 
+        $script:planRunbooks.change.after.tags
+
     }
 
     $runbooks = @(
@@ -47,6 +50,11 @@ Describe "Automation Account Resource Changes in Terraform Plan" {
             Variables = @(
                 @{ Name = "Runbook1-Environment"; Encrypted = $false }
             )
+            Tags      = @{
+                "Environment" = "Dev"
+                "ManagedBy"   = "Terraform"
+                "Project"     = "Automation"
+            }
         },
         @{
             Name      = "Test-ExampleRunbook2"
@@ -61,6 +69,11 @@ Describe "Automation Account Resource Changes in Terraform Plan" {
                 @{ Name = "Runbook2-Secret"; Encrypted = $true },
                 @{ Name = "Runbook2-TestVar"; Encrypted = $false }
             )
+            Tags      = @{
+                "Environment" = "Dev"
+                "ManagedBy"   = "Terraform"
+                "Project"     = "Automation"
+            }
         },
         @{
             Name      = "Test-ExampleRunbook3"
@@ -75,6 +88,11 @@ Describe "Automation Account Resource Changes in Terraform Plan" {
                 @{ Name = "Runbook3-Environment"; Encrypted = $false },
                 @{ Name = "Runbook3-TestVar"; Encrypted = $false }
             )
+            Tags      = @{
+                "Environment" = "Dev"
+                "ManagedBy"   = "Terraform"
+                "Project"     = "Automation"
+            }
         }
     )
 
@@ -109,6 +127,13 @@ Describe "Automation Account Resource Changes in Terraform Plan" {
             foreach ($variable in $_.Variables) {
                 $variableResource = $planVariables | Where-Object { $_.change.after.name -eq $variable.Name }
                 $variableResource | Should -Not -BeNullOrEmpty
+            }
+
+            # Check Runbook Tags
+            $expectedTags = $_.Tags
+            $actualTags = $runbookResource.change.after.tags
+            foreach ($key in $expectedTags.Keys) {
+                $actualTags.$key | Should -Be $expectedTags[$key]
             }
         }
     }
