@@ -1,12 +1,5 @@
 name: terraform-module-ci
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'ci/**'
-      - '*.tf'
-      - '.github/workflows/ci.yml'
   pull_request:
     branches:
       - main
