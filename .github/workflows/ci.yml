@@ -106,11 +106,11 @@ jobs:
             }
 
             # Create a Pester container
-            $container = New-PesterContainer -Path "./" -Data $params
+            $container = New-PesterContainer -Path "{{ github.workspace }}/ci/pester-tests/post-apply" -Data $params
 
             # Invoke Pester with the container
             Invoke-Pester -Container $container -Output Detailed
-        working-directory: ./ci/pester-tests/post-apply
+          azPSVersion: "latest"
 
       # Terraform Destroy (Cleanup)
       - name: Terraform Destroy
