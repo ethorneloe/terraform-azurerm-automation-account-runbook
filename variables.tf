@@ -67,7 +67,7 @@ variable "schedules" {
 }
 
 variable "automation_variables" {
-  type = list(object({
+  type = set(object({
     name        = string
     description = optional(string, "Managed by Terraform")
     encrypted   = optional(bool, false)
