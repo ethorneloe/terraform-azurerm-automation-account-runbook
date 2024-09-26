@@ -73,7 +73,7 @@ module "Runbook1" {
   ]
 
   tags = {
-    "Environment" = "Production"
+    "Environment" = "Dev"
     "ManagedBy"   = "Terraform"
     "Project"     = "Automation"
   }

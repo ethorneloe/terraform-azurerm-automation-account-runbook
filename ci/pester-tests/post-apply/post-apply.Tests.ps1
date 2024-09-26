@@ -1,3 +1,18 @@
+<#
+
+This Pester test suite is designed to validate the creation and execution of Azure Automation Runbooks and related resources after a Terraform apply.
+
+It performs the following checks:
+
+1. Defines the expected state of the runbooks, schedules, and variables based on the test Terraform files.
+2. Iterates over each runbook to verify that the Azure Automation Account contains the expected resources.
+3. Checks that enabled schedules exist in the Azure Automation Account.
+4. Verifies that all defined variables for each runbook are present in the Azure Automation Account.
+5. Executes each runbook and verifies that the job completes successfully.
+6. Ensures that the output of each runbook execution matches the expected output.
+
+#>
+
 param (
     [Parameter(Mandatory)]
     [string]$ResourceGroupName,

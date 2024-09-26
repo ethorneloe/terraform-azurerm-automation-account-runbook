@@ -22,6 +22,8 @@ jobs:
     name: terraform-module-ci
     runs-on: ubuntu-latest
     environment: 'ci'
+    env:
+      TF_PLAN_OUTPUT_JSON_FILEPATH: './ci/terraform/tfplan.json'
     defaults:
       run:
         working-directory: ./ci/terraform
@@ -92,12 +94,28 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan-json
-          path: ./ci/terraform/tfplan.json
+          path: ${{ env.TF_PLAN_OUTPUT_JSON_FILEPATH }}
 
       - name: Verify Terraform Plan
         run: |
           # Pester Tests on plan
         shell: pwsh
+
+      - name: Verify Terraform Plan
+        uses: azure/powershell@v2
+        with:
+          inlineScript: |
+            # Define the parameters
+            $params = @{
+              PlanFilePath = "$env:TF_PLAN_OUTPUT_JSON_FILEPATH"
+            }
+
+            # Create a Pester container
+            $container = New-PesterContainer -Path "$($env:GITHUB_WORKSPACE)/ci/pester-tests/post-plan" -Data $params
+
+            # Invoke Pester with the container
+            Invoke-Pester -Container $container -Output Detailed
+          azPSVersion: "latest"
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
