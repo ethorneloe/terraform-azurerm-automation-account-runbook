@@ -38,7 +38,7 @@ jobs:
           echo "TF_VAR_automation_account_name=${{ vars.TF_VAR_automation_account_name}}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ vars.TF_VAR_resource_group_name }}" >> $GITHUB_ENV
           echo "TF_VAR_test_secret=${{ secrets.TF_VAR_test_secret}}" >> $GITHUB_ENV
-          echo "TF_PLAN_OUTPUT_JSON_FILEPATH: ${{ github.workspace }}/ci/terraform/tfplan.json"
+          echo "TF_PLAN_OUTPUT_JSON_FILEPATH=${{ github.workspace }}/ci/terraform/tfplan.json" >> $GITHUB_ENV
         shell: bash
 
       - name: Authenticate to azure
