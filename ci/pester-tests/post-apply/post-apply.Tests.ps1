@@ -27,12 +27,13 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
     )
 
     foreach ($runbook in $runbooks) {
-        Context "Runbook $($runbook.Name)" {
+        $runbookName = $runbook['name']
+        Context "Runbook $runbookName" {
             It "Should contain the expected automation account resources" {
                 # Check Automation Runbook
-                $runbookResource = Get-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbook.Name
+                $runbookResource = Get-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbookName
                 $runbookResource | Should -Not -BeNullOrEmpty
-                $runbookResource.Name | Should -Be $runbook.Name
+                $runbookResource.Name | Should -Be $runbookName
 
                 # Check Automation Schedules
                 foreach ($scheduleName in $runbook.Schedules) {
@@ -53,7 +54,7 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
                 # Start the Runbook
                 $job = Start-AzAutomationRunbook -AutomationAccountName $AutomationAccountName `
                                                  -ResourceGroupName $ResourceGroupName `
-                                                 -Name $runbook.Name `
+                                                 -Name $runbookName `
                                                  -Parameters @{} -Wait
 
                 # Wait for the job to complete
