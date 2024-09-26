@@ -7,7 +7,7 @@ This module enables creation of runbooks in an existing Azure automation account
 - The `run_on` field for specifying a hybrid worker pool
 -
 ## Usage
-To be completed soon.
+See the `ci/terraform` folder in this repo for an example of runbook creation with schedules and automation variables.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
