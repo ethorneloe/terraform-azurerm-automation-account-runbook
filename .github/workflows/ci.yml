@@ -92,7 +92,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tfplan-json
-          path: tfplan.json
+          path: ./ci/terraform/tfplan.json
 
       - name: Verify Terraform Plan
         run: |
