@@ -77,4 +77,32 @@ Describe "Test Azure Automation Runbook and Related Resource Creation" {
             $variableResource.Encrypted | Should -Be $variable.Encrypted
         }
     }
+
+    It "Should execute job successfully and return output in standard output stream" -ForEach $runbooks {
+
+        $runbookName = $_.Name
+
+        # Execute Runbook and Grab Output
+        $job = Start-AzAutomationRunbook -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Name $runbookName -RunOn "Azure"
+        $job | Should -Not -BeNullOrEmpty
+
+        # Wait for the job to complete with a maximum of 12 iterations (1 minute)
+        $jobStatus = $null
+        for ($i = 0; $i -lt 12; $i++) {
+            Start-Sleep -Seconds 5
+            $job = Get-AzAutomationJob -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Id $job.JobId
+            $jobStatus = $job.Status
+            if ($jobStatus -eq "Completed" -or $jobStatus -eq "Failed" -or $jobStatus -eq "Suspended") {
+                break
+            }
+        }
+
+        # Check job status
+        $jobStatus | Should -Be "Completed"
+
+        # Get job output
+        $jobOutput = Get-AzAutomationJobOutput -ResourceGroupName $ResourceGroupName -AutomationAccountName $AutomationAccountName -Id $job.JobId -Stream Output
+        $jobOutput | Should -eq $runbookName
+
+    }
 }
