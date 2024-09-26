@@ -96,13 +96,19 @@ jobs:
         run: terraform apply -auto-approve tfplan
 
       - name: Verify Terraform Outputs and Apply Actions
-        working-directory: ./ci/pester-tests
+        working-directory: ./ci/pester-tests/post-apply
         run: |
+          # Define the parameters
           $params = @{
             AutomationAccountName = $env:TF_VAR_automation_account_name
             ResourceGroupName = $env:TF_VAR_resource_group_name
           }
-          Invoke-Pester -Script 'post-apply.Tests.ps1' -Output Detailed -Parameters $params
+
+          # Create a Pester container
+          $container = New-PesterContainer -Path "./" -Data $params
+
+          # Invoke Pester with the container
+          Invoke-Pester -Container $container -Output Detailed
         shell: pwsh
 
       # Terraform Destroy (Cleanup)
