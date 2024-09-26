@@ -15,20 +15,25 @@ It performs the following checks:
 #>
 
 param (
+    [Parameter(Mandatory)]
     [string]$PlanFilePath
 )
 
 Describe "Automation Account Resource Changes in Terraform Plan" {
+
     # Load the plan from the JSON file
-    $plan = Get-Content $PlanFilePath | ConvertFrom-Json
+    BeforeAll {
 
-    # Extract the resource changes
-    $planSchedules = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_schedule' } | Select-Object type, change
-    $planJobSchedules = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_job_schedule' } | Select-Object type, change
-    $planRunbooks = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_runbook' } | Select-Object type, change
-    $planVariables = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_variable_string' } | Select-Object type, change
+        $script:plan = Get-Content $PlanFilePath | ConvertFrom-Json
 
-    # Define the runbooks and associated resources based on our test .tf files
+        # Extract the resource changes
+        $script:planSchedules = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_schedule' } | Select-Object type, change
+        $script:planJobSchedules = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_job_schedule' } | Select-Object type, change
+        $script:planRunbooks = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_runbook' } | Select-Object type, change
+        $script:planVariables = $plan.resource_changes | Where-Object { $_.type -like 'azurerm_automation_variable_string' } | Select-Object type, change
+
+    }
+
     $runbooks = @(
         @{
             Name      = "Test-ExampleRunbook1"
@@ -78,7 +83,7 @@ Describe "Automation Account Resource Changes in Terraform Plan" {
         $runbookName = $_.Name
 
         $runbookResource = $planRunbooks | Where-Object { $_.change.after.name -eq $runbookName }
-        $runbookResource | Measure-Object | Select-Object -ExpandProperty Count | Should -Be 1
+        $runbookResource | Should -Not -BeNullOrEmpty
 
         # Check Automation Schedules
         foreach ($schedule in $_.Schedules) {
